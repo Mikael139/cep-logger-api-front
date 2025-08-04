@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import LoginRegistrationView from './components/LoginRegistrationView';
+import CepSearchView from './components/CepSearchView';
+import FavoritesView from './components/FavoritesView';
 
-function App() {
+export default function App() {
+  const [currentView, setCurrentView] = useState('login');
+  const [auth, setAuth] = useState({ email: '', password: '' });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'login':
+        return <LoginRegistrationView
+          setAuth={setAuth}
+          auth={auth}
+          setIsLoggedIn={setIsLoggedIn}
+          setCurrentView={setCurrentView}
+          message={message}
+          setMessage={setMessage}
+        />;
+      case 'cep-search':
+        return <CepSearchView
+          auth={auth}
+          isLoggedIn={isLoggedIn}
+          setCurrentView={setCurrentView}
+          setMessage={setMessage}
+        />;
+      case 'favorites':
+        return <FavoritesView
+          auth={auth}
+          setCurrentView={setCurrentView}
+          setMessage={setMessage}
+        />;
+      default:
+        return <LoginRegistrationView />;
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-light vh-100 d-flex justify-content-center align-items-center p-4">
+      {renderView()}
     </div>
   );
 }
-
-export default App;
